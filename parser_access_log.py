@@ -8,8 +8,8 @@ import os
 
 class Parser:
     parser = argparse.ArgumentParser()
-    parser.add_argument("-l", "--locate", default="file", help="where to search .log files: dir or file")
-    parser.add_argument("-p", "--path", default="access.log", help="path dir or file")
+    parser.add_argument("-l", "--locate", help="where to search .log files: dir or file", required=True)
+    parser.add_argument("-p", "--path", help="path dir or file", required=True)
 
     def get_locate_files(self):
         args = self.parser.parse_args()
@@ -26,6 +26,10 @@ class Parser:
                 path = "result_raw.txt"
         else:
             path = args.path
+            if not os.path.isfile(path):
+                print("Не удалось найти указанный файл.")
+                raise SystemExit
+
         return path
 
     def get_requests_count(self, path):
