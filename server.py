@@ -32,11 +32,16 @@ def get_method(request):
 
 def get_status(request):
     status_with_desc = f'200 {HTTPStatus(200).name}'
-    regexp = '(?P<status>\/\?status=)(?P<value>\d+)'
+    regexp = '(?P<status>\/\?status=)'
     match = re.search(regexp, request)
     if match:
-        status = int(match.group('value'))
-        status_with_desc = f'{status} {HTTPStatus(status).name}'
+        regexp = '(?P<status>\/\?status=)(?P<value>\d{3})'
+        match = re.search(regexp, request)
+        if not match:
+            status_with_desc = f'200 {HTTPStatus(200).name}'
+        else:
+            status = int(match.group('value'))
+            status_with_desc = f'{status} {HTTPStatus(status).name}'
     return status_with_desc
 
 
